@@ -32,11 +32,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   MainClient client = MainClient();
   int _counter = 0;
+  String path = 'assets/users.json';
 
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
+  }
+
+  @override
+  void initState() {
+    client.fillRandomList();
+    super.initState();
   }
 
   @override
@@ -59,15 +66,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
               FutureBuilder(
+                // future: loadJson('assets/users.json'),
                 future: client.computeReadJson(),
                 builder: (context, snapshot) {
-                  print(snapshot.data);
                   if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return Text(snapshot.data![index].lastName);
-                      },
+                    return SizedBox(
+                      height: 400,
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Text(snapshot.data![index].lastName);
+                        },
+                      ),
                     );
                   }
                   return const CircularProgressIndicator();
